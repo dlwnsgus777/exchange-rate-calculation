@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter(value = AccessLevel.PUBLIC)
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
-public class GetReceivedAmountRequest {
+public class CalcReceivedAmountRequest {
     private String code;
     private Long money;
 }

@@ -1,11 +1,9 @@
 package youth.exchange.application.dto;
 
-import java.math.BigDecimal;
-
-public class GetReceivedAmountResponse {
+public class CalcReceivedAmountResponse {
     private Double receivedAmount;
 
-    public GetReceivedAmountResponse(Double receivedAmount) {
+    public CalcReceivedAmountResponse(Double receivedAmount) {
         this.receivedAmount = receivedAmount;
     }
 

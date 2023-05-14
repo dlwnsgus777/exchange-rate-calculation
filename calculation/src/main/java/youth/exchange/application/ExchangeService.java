@@ -2,8 +2,8 @@ package youth.exchange.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import youth.exchange.application.dto.GetReceivedAmountRequest;
-import youth.exchange.application.dto.GetReceivedAmountResponse;
+import youth.exchange.application.dto.CalcReceivedAmountRequest;
+import youth.exchange.application.dto.CalcReceivedAmountResponse;
 import youth.exchange.domain.Exchange;
 import youth.exchange.infrastructure.ExchangeRepository;
 
@@ -18,10 +18,10 @@ public class ExchangeService {
         this.exchangeRepository = exchangeRepository;
     }
 
-    public GetReceivedAmountResponse calcReceivedAmount(GetReceivedAmountRequest dto) {
+    public CalcReceivedAmountResponse calcReceivedAmount(CalcReceivedAmountRequest dto) {
         Optional<Exchange> findExchange = exchangeRepository.getByCode(dto.getCode());
         Double calcResult = dto.getMoney() * findExchange.get().exchangeRate();
 
-        return new GetReceivedAmountResponse(calcResult);
+        return new CalcReceivedAmountResponse(calcResult);
     }
 }
