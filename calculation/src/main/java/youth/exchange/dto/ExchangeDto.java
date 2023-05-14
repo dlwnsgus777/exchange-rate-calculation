@@ -11,4 +11,7 @@ public class ExchangeDto {
   private String code;
   private Double exchangeRate;
 
+  public Exchange toEntity() {
+    return new Exchange(null, code, exchangeRate);
+  }
 }

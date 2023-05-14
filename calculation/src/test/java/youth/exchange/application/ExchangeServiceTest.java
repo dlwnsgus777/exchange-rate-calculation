@@ -10,11 +10,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import youth.exchange.dto.CalcReceivedAmountRequest;
 import youth.exchange.dto.CalcReceivedAmountResponse;
 import youth.exchange.domain.Exchange;
+import youth.exchange.dto.ExchangeDto;
+import youth.exchange.infrastructure.ExchangeClient;
 import youth.exchange.infrastructure.ExchangeRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith({MockitoExtension.class})
 class ExchangeServiceTest {
@@ -22,6 +26,8 @@ class ExchangeServiceTest {
     ExchangeService exchangeService;
     @Mock
     ExchangeRepository exchangeRepository;
+    @Mock
+    ExchangeClient exchangeClient;
 
     @Test
     @DisplayName("수취 금액 계산하기")
@@ -36,6 +42,25 @@ class ExchangeServiceTest {
 
         // then
         assertThat(result.getReceivedAmount()).isEqualTo(1_121_419.945);
+    }
+
+    @Test
+    @DisplayName("api 호출로 가져온 환율 정보 DB 저장하기")
+    public void testExchangeRatesInsertToDB() {
+        // given
+        // when
+        Mockito.when(exchangeClient.getExchangeRates()).thenReturn(getExchangeRates());
+        exchangeService.insertExchangeRates();
+
+        // then
+        Mockito.verify(exchangeRepository, Mockito.times(3)).save(any());
+    }
+
+    private static List<ExchangeDto> getExchangeRates() {
+        return List.of(
+                new ExchangeDto("KRW", 1311.123),
+                new ExchangeDto("JPY", 1111.1111),
+                new ExchangeDto("PHP", 1211.1211));
     }
 
 }
