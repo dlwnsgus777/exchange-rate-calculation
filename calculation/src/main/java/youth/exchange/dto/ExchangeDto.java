@@ -10,12 +10,13 @@ import youth.exchange.domain.Exchange;
 public class ExchangeDto {
   private String code;
   private Double exchangeRate;
+  private String country;
 
   public Exchange toEntity() {
-    return new Exchange(null, code, exchangeRate);
+    return new Exchange(null, code, exchangeRate, country);
   }
 
   public static ExchangeDto from(Exchange entity) {
-    return new ExchangeDto(entity.getCode(), entity.getExchangeRate());
+    return new ExchangeDto(entity.getCode(), entity.getExchangeRate(), entity.getCountry());
   }
 }

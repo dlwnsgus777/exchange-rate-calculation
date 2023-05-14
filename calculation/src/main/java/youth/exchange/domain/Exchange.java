@@ -19,6 +19,7 @@ public class Exchange extends BaseEntity {
     private Long id;
     private String code;
     private Double exchangeRate;
+    private String country;
 
     public Double exchangeRate() {
         return exchangeRate;

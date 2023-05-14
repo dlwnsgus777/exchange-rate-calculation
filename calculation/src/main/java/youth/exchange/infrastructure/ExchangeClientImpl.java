@@ -36,9 +36,9 @@ public class ExchangeClientImpl implements ExchangeClient{
             ExchangeResult resultBody = result.getBody();
             if (resultBody.getSuccess()) {
                 return List.of(
-                        new ExchangeDto("KRW", resultBody.getQuotes().getUsdKrw()),
-                        new ExchangeDto("JPY", resultBody.getQuotes().getUsdJpy()),
-                        new ExchangeDto("PHP", resultBody.getQuotes().getUsdPhp())
+                        new ExchangeDto("KRW", resultBody.getQuotes().getUsdKrw(), "한국"),
+                        new ExchangeDto("JPY", resultBody.getQuotes().getUsdJpy(),"일본"),
+                        new ExchangeDto("PHP", resultBody.getQuotes().getUsdPhp(), "필리핀")
                 );
             }
         }

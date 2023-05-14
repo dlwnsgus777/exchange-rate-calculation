@@ -38,7 +38,7 @@ class ExchangeServiceTest {
 
         // when
         // 송금금액 * 환율 => 수취금액
-        Mockito.when(exchangeRepository.findByCode(dto.getCode())).thenReturn(Optional.of(new Exchange(1L, "USDKWD", 1_121.419945)));
+        Mockito.when(exchangeRepository.findByCode(dto.getCode())).thenReturn(Optional.of(new Exchange(1L, "KWD", 1_121.419945, "한국")));
         CalcReceivedAmountResponse result = exchangeService.calcReceivedAmount(dto);
 
         // then
@@ -75,16 +75,16 @@ class ExchangeServiceTest {
 
     private static List<ExchangeDto> getExchangeRates() {
         return List.of(
-                new ExchangeDto("KRW", 1311.123),
-                new ExchangeDto("JPY", 1111.1111),
-                new ExchangeDto("PHP", 1211.1211));
+                new ExchangeDto("KRW", 1311.123, "한국"),
+                new ExchangeDto("JPY", 1111.1111, "일본"),
+                new ExchangeDto("PHP", 1211.1211, "필리핀"));
     }
 
     private static List<Exchange> getExchangeRatesEntities() {
         return List.of(
-                new Exchange(null,"KRW", 1311.1234),
-                new Exchange(null,"JPY", 1111.1111),
-                new Exchange(null,"PHP", 1211.1211));
+                new Exchange(null,"KRW", 1311.1234, "한국"),
+                new Exchange(null,"JPY", 1111.1111, "일본"),
+                new Exchange(null,"PHP", 1211.1211, "필리핀"));
     }
 
 }
