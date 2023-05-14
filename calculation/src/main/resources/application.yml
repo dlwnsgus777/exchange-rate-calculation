@@ -18,4 +18,5 @@ spring:
         format_sql: true
 
 api:
+  exchange_api_url: https://api.apilayer.com/currency_data/live?source=USD
   exchange_api_key: 4zYWvfHR7gMMWy04g2v96gnG0as55wIT

@@ -25,6 +25,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	runtimeOnly 'com.h2database:h2'
 
+	testImplementation("org.mock-server:mockserver-netty-no-dependencies:5.14.0")
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

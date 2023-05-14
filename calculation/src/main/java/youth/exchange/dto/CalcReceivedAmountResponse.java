@@ -1,4 +1,4 @@
-package youth.exchange.application.dto;
+package youth.exchange.dto;
 
 public class CalcReceivedAmountResponse {
     private Double receivedAmount;

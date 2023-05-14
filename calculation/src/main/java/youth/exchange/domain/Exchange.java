@@ -18,9 +18,7 @@ public class Exchange extends BaseEntity {
     private String code;
     private Double exchangeRate;
 
-
     public Double exchangeRate() {
         return exchangeRate;
     }
-
 }

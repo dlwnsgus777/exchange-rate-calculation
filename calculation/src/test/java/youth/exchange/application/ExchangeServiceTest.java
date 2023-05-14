@@ -7,8 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import youth.exchange.application.dto.CalcReceivedAmountRequest;
-import youth.exchange.application.dto.CalcReceivedAmountResponse;
+import youth.exchange.dto.CalcReceivedAmountRequest;
+import youth.exchange.dto.CalcReceivedAmountResponse;
 import youth.exchange.domain.Exchange;
 import youth.exchange.infrastructure.ExchangeRepository;
 
