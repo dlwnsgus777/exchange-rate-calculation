@@ -8,6 +8,7 @@ import youth.exchange.domain.Exchange;
 import youth.exchange.dto.CalcReceivedAmountRequest;
 import youth.exchange.dto.CalcReceivedAmountResponse;
 import youth.exchange.dto.ExchangeDto;
+import youth.exchange.dto.GetExchangeRatesResponse;
 import youth.exchange.infrastructure.ExchangeClient;
 import youth.exchange.infrastructure.ExchangeRepository;
 
@@ -49,4 +50,9 @@ public class ExchangeService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public GetExchangeRatesResponse getExchangeRates() {
+        List<Exchange> result = exchangeRepository.findAll();
+        return GetExchangeRatesResponse.from(result);
+    }
 }

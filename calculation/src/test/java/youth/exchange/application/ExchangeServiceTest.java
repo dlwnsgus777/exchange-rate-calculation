@@ -7,10 +7,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import youth.exchange.domain.Exchange;
 import youth.exchange.dto.CalcReceivedAmountRequest;
 import youth.exchange.dto.CalcReceivedAmountResponse;
-import youth.exchange.domain.Exchange;
 import youth.exchange.dto.ExchangeDto;
+import youth.exchange.dto.GetExchangeRatesResponse;
 import youth.exchange.infrastructure.ExchangeClient;
 import youth.exchange.infrastructure.ExchangeRepository;
 
@@ -56,11 +57,34 @@ class ExchangeServiceTest {
         Mockito.verify(exchangeRepository, Mockito.times(3)).save(any());
     }
 
+    @Test
+    @DisplayName("환율 정보 가져오기")
+    public void testGetExchangeRatesResponse() {
+        // given
+        // when
+        Mockito.when(exchangeRepository.findAll()).thenReturn(getExchangeRatesEntities());
+        GetExchangeRatesResponse result = exchangeService.getExchangeRates();
+
+        // then
+        for (ExchangeDto dto : result.getExchangeRates()) {
+            if (dto.getCode().equals("KRW")) {
+                assertThat(dto.getExchangeRate()).isEqualTo(1311.1234);
+            }
+        }
+    }
+
     private static List<ExchangeDto> getExchangeRates() {
         return List.of(
                 new ExchangeDto("KRW", 1311.123),
                 new ExchangeDto("JPY", 1111.1111),
                 new ExchangeDto("PHP", 1211.1211));
+    }
+
+    private static List<Exchange> getExchangeRatesEntities() {
+        return List.of(
+                new Exchange(null,"KRW", 1311.1234),
+                new Exchange(null,"JPY", 1111.1111),
+                new Exchange(null,"PHP", 1211.1211));
     }
 
 }

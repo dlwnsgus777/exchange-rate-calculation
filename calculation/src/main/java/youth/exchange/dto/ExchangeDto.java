@@ -14,4 +14,8 @@ public class ExchangeDto {
   public Exchange toEntity() {
     return new Exchange(null, code, exchangeRate);
   }
+
+  public static ExchangeDto from(Exchange entity) {
+    return new ExchangeDto(entity.getCode(), entity.getExchangeRate());
+  }
 }
