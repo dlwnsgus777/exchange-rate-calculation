@@ -1,23 +1,27 @@
 package youth.exchange.application;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import youth.exchange.application.dto.GetReceivedAmountRequest;
+import youth.exchange.application.dto.GetReceivedAmountResponse;
+import youth.exchange.domain.Exchange;
+import youth.exchange.infrastructure.ExchangeRepository;
 
-import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("환율 관련 서비스")
 @ExtendWith({MockitoExtension.class})
 class ExchangeServiceTest {
     @InjectMocks
     ExchangeService exchangeService;
+    @Mock
+    ExchangeRepository exchangeRepository;
 
     @Test
     @DisplayName("수취 금액 계산하기")
@@ -26,35 +30,13 @@ class ExchangeServiceTest {
         GetReceivedAmountRequest dto = new GetReceivedAmountRequest("KWD", 1000L);
 
         // when
+        // 송금금액 * 환율 => 수취금액
+        Mockito.when(exchangeRepository.getByCode(dto.getCode())).thenReturn(Optional.of(new Exchange(1L, "USDKWD", 1_121.419945)));
         GetReceivedAmountResponse result = exchangeService.calcReceivedAmount(dto);
 
         // then
-        assertThat(result.getReceivedAmount()).isEqualTo(1L);
+        assertThat(result.getReceivedAmount()).isEqualTo(1_121_419.945);
     }
 
-    private class GetReceivedAmountResponse {
-        private BigDecimal receivedAmount;
-
-        public GetReceivedAmountResponse(BigDecimal receivedAmount) {
-            this.receivedAmount = receivedAmount;
-        }
-
-        public Long getReceivedAmount() {
-            return receivedAmount.longValue();
-        }
-    }
-
-    private class GetReceivedAmountRequest {
-        private String country;
-        private BigDecimal money;
-
-        public GetReceivedAmountRequest(String country, BigDecimal money) {
-            this.country = country;
-            this.money = money;
-        }
-
-        public GetReceivedAmountRequest(String country, long money) {
-            this(country, BigDecimal.valueOf(money));
-        }
-    }
 }
+
