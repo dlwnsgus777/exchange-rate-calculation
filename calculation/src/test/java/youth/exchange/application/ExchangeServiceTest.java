@@ -37,7 +37,7 @@ class ExchangeServiceTest {
 
         // when
         // 송금금액 * 환율 => 수취금액
-        Mockito.when(exchangeRepository.getByCode(dto.getCode())).thenReturn(Optional.of(new Exchange(1L, "USDKWD", 1_121.419945)));
+        Mockito.when(exchangeRepository.findByCode(dto.getCode())).thenReturn(Optional.of(new Exchange(1L, "USDKWD", 1_121.419945)));
         CalcReceivedAmountResponse result = exchangeService.calcReceivedAmount(dto);
 
         // then

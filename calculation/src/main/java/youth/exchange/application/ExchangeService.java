@@ -3,9 +3,10 @@ package youth.exchange.application;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import youth.exchange.domain.Exchange;
 import youth.exchange.dto.CalcReceivedAmountRequest;
 import youth.exchange.dto.CalcReceivedAmountResponse;
-import youth.exchange.domain.Exchange;
 import youth.exchange.dto.ExchangeDto;
 import youth.exchange.infrastructure.ExchangeClient;
 import youth.exchange.infrastructure.ExchangeRepository;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ExchangeService {
     private final ExchangeRepository exchangeRepository;
     private final ExchangeClient exchangeClient;
@@ -25,9 +27,9 @@ public class ExchangeService {
         this.insertExchangeRates();
     }
 
-
+    @Transactional(readOnly = true)
     public CalcReceivedAmountResponse calcReceivedAmount(CalcReceivedAmountRequest dto) {
-        Optional<Exchange> findExchange = exchangeRepository.getByCode(dto.getCode());
+        Optional<Exchange> findExchange = exchangeRepository.findByCode(dto.getCode());
         Double calcResult = dto.getMoney() * findExchange.get().exchangeRate();
 
         return new CalcReceivedAmountResponse(calcResult);
@@ -37,7 +39,14 @@ public class ExchangeService {
     public void insertExchangeRates() {
         List<ExchangeDto> resultExchangeRates = exchangeClient.getExchangeRates();
         for (ExchangeDto resultExchangeRate : resultExchangeRates) {
-            exchangeRepository.save(resultExchangeRate.toEntity());
+            Optional<Exchange> findEntity = exchangeRepository.findByCode(resultExchangeRate.getCode());
+            if (findEntity.isEmpty()) {
+                exchangeRepository.save(resultExchangeRate.toEntity());
+                continue;
+            }
+
+            findEntity.get().updateExchangeRate(resultExchangeRate.getExchangeRate());
         }
     }
+
 }

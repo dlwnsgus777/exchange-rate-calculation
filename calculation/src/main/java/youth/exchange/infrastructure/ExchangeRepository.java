@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface ExchangeRepository extends JpaRepository<Exchange, Long> {
-    Optional<Exchange> getByCode(String code);
+    Optional<Exchange> findByCode(String code);
 }
