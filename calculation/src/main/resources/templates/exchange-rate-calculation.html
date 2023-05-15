@@ -44,7 +44,6 @@
         </div>
         <div class="col-6 col-md-3">
             <div id="exchange-area"></div>
-<!--            <input id="exchange-area" class="form-control" type="text" disabled readonly>-->
         </div>
     </div>
     <div class="row my-4">
@@ -57,7 +56,7 @@
     </div>
     <div class="row my-4">
         <div class="col-8 col-md-5 d-grid">
-            <button type="button" class="btn btn-outline-primary" th:onclick="calculate()">Submit</button>
+            <button type="button" class="btn btn-outline-primary" th:onclick="calcReceivedAmount()">Submit</button>
         </div>
     </div>
 
@@ -74,7 +73,6 @@
     document.getElementById("exchange-rates").dispatchEvent(new Event("change"));
 
     function setExchange() {
-        console.log("????")
         const selectedOption = event.target.options[event.target.selectedIndex];
 
         const exchange = Number(Math.floor(selectedOption.dataset["exchange"] * Math.pow(10, 2)) / Math.pow(10, 2)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -84,17 +82,45 @@
         document.getElementById("exchange-area").innerHTML = `<div class="fw-bolder">${exchange} ${currency}/USD</div>`;
     }
 
-    function calculate() {
-        // 환율 + 송금액으로 수취금액 계산하기
-        // 환율 * 송금액 = 수취금액
-        var exchange = document.getElementById("exchange-rates").options[document.getElementById("exchange-rates").selectedIndex].dataset["exchange"];
-        var code = document.getElementById("exchange-rates").options[document.getElementById("exchange-rates").selectedIndex].value;
-        var amount = document.getElementById("amount").value;
-        // 수취금액
-        var receivedAmount = (exchange * amount).toFixed(2);
+    function calcReceivedAmount() {
+        let xmlhttp;
+        if (window.XMLHttpRequest) {
+            xmlhttp = new XMLHttpRequest();
+        }
 
-        document.getElementById("received-area").innerHTML = `수취금액은 ${receivedAmount} ${code} 입니다.`;
-        document.getElementById("received-area").style.display = "";
+        const params = {
+            code: document.getElementById("exchange-rates").options[document.getElementById("exchange-rates").selectedIndex].value,
+            money: document.getElementById("amount").value
+        }
+
+        xmlhttp.open("POST", "http://localhost:8080/api/exchange-rates/calculation", true)
+        xmlhttp.setRequestHeader("Content-Type", "application/json")
+        xmlhttp.send(JSON.stringify(params))
+
+        xmlhttp.onload = () => {
+            if (xmlhttp.status == 200) {
+                const amount = JSON.parse(xmlhttp?.response);
+                const result = amount?.receivedAmount.toFixed(2);
+                document.getElementById("received-area").innerHTML = `수취금액은 ${result} ${params.code} 입니다.`;
+                document.getElementById("received-area").style.display = "";
+                return;
+            }
+
+            if (xmlhttp.status == 400) {
+                alert("송금액이 바르지 않습니다.")
+                document.getElementById("received-area").innerHTML = `<div></div>`;
+                document.getElementById("amount").value = null;
+                return;
+            }
+
+            if (xmlhttp.status >= 500) {
+                alert("오류가 발생했습니다.")
+                document.getElementById("received-area").innerHTML = `<div></div>`;
+                document.getElementById("amount").value = null;
+                return;
+            }
+        }
     }
+
 </script>
 </html>
