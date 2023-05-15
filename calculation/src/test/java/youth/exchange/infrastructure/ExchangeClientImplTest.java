@@ -45,6 +45,7 @@ class ExchangeClientImplTest {
     public void stopMockServer() {
         this.mockServer.stop();
     }
+    
     @Test
     @DisplayName("환율 api 호출 테스트")
     void testGetExchangeToApiCall() {
