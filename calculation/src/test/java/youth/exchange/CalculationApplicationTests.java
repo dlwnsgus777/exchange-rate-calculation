@@ -1,4 +1,4 @@
-package youth.calculation;
+package youth.exchange;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,5 +9,4 @@ class CalculationApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
