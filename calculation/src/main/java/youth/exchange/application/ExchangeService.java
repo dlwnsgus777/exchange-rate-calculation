@@ -30,8 +30,8 @@ public class ExchangeService {
 
     @Transactional(readOnly = true)
     public CalcReceivedAmountResponse calcReceivedAmount(CalcReceivedAmountRequest dto) {
-        Optional<Exchange> findExchange = exchangeRepository.findByCode(dto.getCode());
-        Double calcResult = dto.getMoney() * findExchange.get().exchangeRate();
+        Exchange findExchange = exchangeRepository.findByCode(dto.getCode()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 코드입니다."));
+        Double calcResult = dto.getMoney() * findExchange.exchangeRate();
 
         return new CalcReceivedAmountResponse(calcResult);
     }
